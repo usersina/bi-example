@@ -1,0 +1,84 @@
+GET http://localhost:9200/
+
+### Show all indices
+# curl -X GET "localhost:9200/_cat/indices?v&pretty"
+GET http://localhost:9200/_cat/indices?v&pretty
+
+### Create a new index
+# curl -X PUT "localhost:9200/products-index?pretty"
+# -H 'Content-Type: application/json' -d '<json-body>'
+PUT http://localhost:9200/products-index?pretty
+Content-Type: application/json
+
+{
+    "settings": {
+        // https://www.elastic.co/guide/en/elasticsearch/reference/8.6/coerce.html
+        "index.mapping.coerce": false
+    },
+    "mappings": {
+        "properties": {
+            "name": { "type": "text" },
+            "price": { "type": "double" },
+            "reviews": { "type": "text" },
+            // https://www.elastic.co/guide/en/elasticsearch/reference/8.6/date.html
+            "createdAt": { "type": "date", "format": "epoch_second" }
+        },
+        // https://www.elastic.co/guide/en/elasticsearch/reference/current/dynamic.htmlhttps://www.elastic.co/guide/en/elasticsearch/reference/current/dynamic.html
+        "dynamic": true
+    }
+}
+
+### Show created index
+GET http://localhost:9200/products-index?pretty
+
+
+### Create a new document with an ID of 1
+PUT http://localhost:9200/products-index/_doc/1?pretty
+Content-Type: application/json
+
+{
+    "name": "Samsung S22 Ultra",
+    "price": 975.99,
+    "reviews": ["Good"],
+    "createdAt": {{$timestamp}} // epoch_second
+}
+
+### Create a new document with auto generated ID
+POST http://localhost:9200/products-index/_doc/?pretty
+Content-Type: application/json
+
+{
+    "name": "iPhone 14 Pro",
+    "price": 1099,
+    "reviews": ["Good"],
+    "createdAt":  {{$timestamp}} // epoch_second
+}
+
+### Bulk insert some documents
+# See http://ndjson.org/
+POST http://localhost:9200/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": { "_index": "products-index" } }
+{ "name": "Bulk Item 666", "price": 666, "reviews": ["Good"], "createdAt": {{$timestamp}} }
+{ "index": { "_index": "products-index" } }
+{ "name": "Bulk Item 123", "price": 123, "reviews": ["Good"], "createdAt": {{$timestamp}} }
+
+### Get all products
+GET http://localhost:9200/products-index/_search?pretty
+
+### Get product with ID of 1
+GET http://localhost:9200/products-index/_search?pretty
+Content-Type: application/json
+
+{
+    "query": {
+        "match_phrase": {
+            "name": "ultra"
+        }
+    }
+}
+
+### Delete an index
+# curl -X DELETE "localhost:9200/products-index?pretty"
+DELETE http://localhost:9200/products-index?pretty
