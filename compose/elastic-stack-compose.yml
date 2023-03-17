@@ -28,10 +28,30 @@ services:
     ports:
       - 5601:5601
 
+  logstash:
+    image: logstash:8.6.2
+    container_name: logstash
+    depends_on:
+      - elasticsearch
+    environment:
+      - "LS_JAVA_OPTS=-Xms256m -Xmx256m"
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+    volumes:
+      - ./init/logstash/conf.d:/etc/logstash/conf.d
+      - ./init/logstash/java-libs:/etc/logstash/java-libs
+    networks:
+      - elastic-net
+      - shared-net
+    ports:
+      - 9600:9600
+
 volumes:
   elastic-vol:
     driver: local
 
 networks:
   elastic-net:
+    driver: bridge
+  shared-net:
+    name: shared_network
     driver: bridge

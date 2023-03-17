@@ -12,6 +12,7 @@ services:
       - ./init/mysql:/docker-entrypoint-initdb.d
     networks:
       - mariadb-net
+      - shared-net
     ports:
       - 3316:3306
     healthcheck:
@@ -37,4 +38,7 @@ volumes:
 
 networks:
   mariadb-net:
+    driver: bridge
+  shared-net:
+    name: shared_network
     driver: bridge
