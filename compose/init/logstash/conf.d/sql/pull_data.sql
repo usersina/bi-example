@@ -3,6 +3,7 @@
 SELECT
 	-- Primary keys
 	products.productCode as "product_code",
+	orders.orderNumber as "order_number",
 	customers.customerNumber as "customer_number",
 	employees.employeeNumber as "employee_number",
 	offices.officeCode as "office_code",
