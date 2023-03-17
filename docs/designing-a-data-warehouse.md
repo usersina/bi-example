@@ -5,6 +5,11 @@ It is a core component of business intelligence, [according to wikipedia.](https
 
 The steps below skim the theory in a brief way but focus more on the designing process of a specific data warehouse, for a specific business.
 
+1. Identifying the business process
+2. Identifying the grain
+3. Choosing the dimensions
+4. Identifying the measures
+
 ## **I. Identifying the business process**
 
 - **In general**
