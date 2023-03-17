@@ -1,16 +1,20 @@
-#: ----------------------------------------- Variables -----------------------------------------
-#: COMPOSE_FILE: The path to the compose file to use when running the commands
-COMPOSE_FILE = docker-compose.yml
-
+#: --------------------------------------------------------------------------------------------
+#: This Makefile defines the recipes used for this projects, which are used to start and stop
+#: the compose containers in an easy to manage way.
+#: 
+# ---------------------------------------- Variables -----------------------------------------
 #: ----------------------------------------- Commands -----------------------------------------
 help:		#: Show this help
 	@sed -ne '/@sed/!s/#: //p' $(MAKEFILE_LIST)
 
-up:		#: Start the services in the compose file
-	$(VARS) docker compose -f ${COMPOSE_FILE} up -d
+up:		#: Start all compose services in the compose directory
+	docker compose -f ./compose/mariadb-stack-compose.yml up -d
+	docker compose -f ./compose/elastic-stack-compose.yml up -d
 
-down:		#: Safely stop the services
-	$(VARS) docker compose -f ${COMPOSE_FILE} down
+down:		#: Safely stop the running compose services
+	-docker compose -f ./compose/mariadb-stack-compose.yml down
+	docker compose -f ./compose/elastic-stack-compose.yml down
 
 delete:		#: Stop and delete all data volumes (cannot be reverted)
-	$(VARS) docker compose -f ${COMPOSE_FILE} down --volumes
+	-docker compose -f ./compose/mariadb-stack-compose.yml down --volumes
+	docker compose -f ./compose/elastic-stack-compose.yml down --volumes
