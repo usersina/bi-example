@@ -26,6 +26,11 @@ This repository a compilation of notes and tools for [data warehousing](https://
   - [x] Create dashboards/cubes in Kibana
   - [ ] (optional) Make reports
 
+## Notes
+
+- [Makefile](./Makefile) is responsible for interacting with the compose files.
+- The [requests.http](./requests.http) file is used with [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) to test requests against Elasticsearch.
+
 ### Resources
 
 - [Video: Designing Your Data Warehouse from the Ground Up](https://www.youtube.com/watch?v=patBYUGwsHE)
